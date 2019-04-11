@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema path="/org/gcleaner/" id="org.gcleaner" gettext-domain="gcleaner">
+		<key name="window-width" type="i">
+			<default>890</default>
+			<summary>Ancho de la Ventana</summary>
+			<description>Valor del Ancho de la ventana de GCleaner medido en pixels.</description>
+		</key>
+		<key name="window-height" type="i">
+			<default>500</default>
+			<summary>Alto de la Ventana</summary>
+			<description>Valor del Alto de la ventana de GCleaner medido en pixels.</description>
+		</key>
+		 <key name="opening-x" type="i">
+            <default>-1</default>
+            <summary>Posicion X de la Ventana</summary>
+            <description>Guarda la Posicion X de la ventana para restaurarla mas tarde.</description>
+        </key>
+        <key name="opening-y" type="i">
+            <default>-1</default>
+            <summary>Posicion Y de la Ventana</summary>
+            <description>Guarda la Posicion Y de la ventana para restaurarla mas tarde.</description>
+        </key>
+        <key name="analyzefirefox" type="b">
+			<default>true</default>
+			<summary>Analizar Mozilla Firefox</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Mozilla Firefox.</description>
+		</key>
+		<key name="analyzechrome" type="b">
+			<default>true</default>
+			<summary>Analizar Google Chrome</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Google Chrome.</description>
+		</key>
+		<key name="analyzemidori" type="b">
+			<default>true</default>
+			<summary>Analizar Midori</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Midori.</description>
+		</key>
+		<key name="analyzeflash" type="b">
+			<default>true</default>
+			<summary>Analizar Flash Player</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Flash Player.</description>
+		</key>
+		<key name="analyzepackages" type="b">
+			<default>true</default>
+			<summary>Analizar Paquetes DEB</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Paquetes DEB.</description>
+		</key>
+		<key name="analyzedocsrecent" type="b">
+			<default>true</default>
+			<summary>Analizar Documentos Recientes</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Documentos Recientes.</description>
+		</key>
+		<key name="analyzepapelera" type="b">
+			<default>true</default>
+			<summary>Analizar Papelera de Reciclaje</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Papelera de Reciclaje.</description>
+		</key>
+		<key name="analyzeterminal" type="b">
+			<default>false</default>
+			<summary>Analizar Terminal</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Terminal.</description>
+		</key>
+		<key name="analyzekernels" type="b">
+			<default>false</default>
+			<summary>Analizar Kernel Antiguos</summary>
+			<description>Activa o Desactiva si GCleaner va a analizar Kernel Antiguos.</description>
+		</key>
+	</schema>
+</schemalist>

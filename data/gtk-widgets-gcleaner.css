@@ -1,0 +1,207 @@
+/* Copyright 2017 Juan Pablo Lozano
+*
+* Este archivo es parte de 'GCleaner'.
+*
+* 'GCleaner' es software libre: usted puede redistribuirlo
+* y/o modificarlo bajo los terminos de la Licencia Publica General GNU
+* publicada por la Free Software Foundation, ya sea la version 3 de la
+* Licencia, o (a su eleccion) cualquier version posterior.
+*
+* 'GCleaner' es distribuido con la esperanza de que sera
+* util, pero SIN NINGUNA GARANTIA; incluso sin la garantia implicita de
+* COMERCIALIZACION o IDONEIDAD PARA UN PROPOSITO PARTICULAR. Vease la
+* Licencia Publica General GNU para mas detalles.
+*
+* Usted debe haber recibido una copia de la Licencia Publica General GNU
+* junto con 'GCleaner'. Si no es asi, consulte http://www.gnu.org/licenses/.
+*/
+
+/*Archivo CSS para Estilos de GCleaner*/
+
+.Sidebar,
+.SidebarEv {
+	color: #FFFFFF;
+	background-color: #676767;
+	border-color: #676767; 
+	text-shadow: -1px 1px 0px #4D4D4D;
+}
+
+.Sidebar:backdrop,
+.SidebarEv:backdrop {
+	color: #C3C3C3;
+}
+
+/*Dark HeaderBar Style (Uncomment all class .csd)*/
+/*.csd {
+	background-image: -gtk-gradient (linear, left top, left bottom, from (shade (#3A4043, 1.00)), to (shade (#303537, 1.00)));
+	color: #FFFFFF;
+	border-color: #2E2E2E;
+	text-shadow: -1px 1px 0px #2E2E2E;
+	box-shadow: inset 0px 1px 1px #52575B;
+}
+
+.csd.titlebar .titlebutton {
+    background: none;
+    border-color: transparent;
+    border-style: solid;
+    border-image: none;
+    box-shadow: none;
+    color: #B2B2B2;
+    text-shadow: 1px 0px 1px #000;
+}
+
+.csd.titlebar .button.image-button GtkImage:backdrop {
+    color: #626262;
+}
+
+.csd:backdrop {
+	color: #C3C3C3;
+}*/
+
+.about_btn {
+    background-image: none;
+    border-color: transparent;
+    border-style: solid;
+    box-shadow: none;
+}
+
+.Toolbar {
+	color: #FFFFFF;
+	background-image: -gtk-gradient (linear, left top, left bottom, from (shade (#4D4D4D, 1.00)), to (shade (#4D4D4D, 1.00)));
+	text-shadow: -1px 1px 0px #2E2E2E;
+	border-color: #4D4D4D;
+	box-shadow: inset 0px 1px 1px #4D4D4D;
+}
+
+.Toolbar:backdrop {
+	color: #C3C3C3;
+}
+
+
+/**************************
+* Suggested Action Button *
+**************************/
+
+.suggested-action.button {
+    background-image: linear-gradient(to bottom,
+                                  shade (#3d9bda, 1.30),
+                                  #3d9bda
+                                  );
+
+    border-color: shade (#3d9bda, 0.90);
+}
+
+GtkOverlay .suggested-action.button {
+    background-image: none;
+    background-color: #3d9bda;
+    border-color: #3d9bda;
+}
+
+.suggested-action.button GtkLabel,
+.suggested-action.button GtkLabel:prelight {
+    color: #FFF;
+    text-shadow: 0 1px alpha (#000, 0.3);
+    icon-shadow: 0 1px alpha (#000, 0.3);
+}
+
+.suggested-action.button:insensitive {
+    border-color: alpha (#000, 0.20);
+    background-image: none;
+    background-color: transparent;
+}
+
+.suggested-action.button GtkLabel:insensitive {
+    text-shadow: 0 1px alpha (#fff, 0.3);
+    icon-shadow: 0 1px alpha (#fff, 0.3);
+    color: mix(#333, shade (#FFF, 0.96), 0.6);
+}
+
+.suggested-action.button:active,
+.suggested-action.button:active:hover {
+    background-image: linear-gradient(to bottom,
+                                  shade (#3d9bda, 1.20),
+                                  #3d9bda
+                                  );
+
+    border-color: shade (#3d9bda, 0.85);
+}
+
+/****************************
+* Destructive Action Button *
+****************************/
+
+.destructive-action.button,
+.titlebar .destructive-action.button {
+    background-image: linear-gradient(to bottom,
+                                  shade (#c92e34, 1.30),
+                                  #c92e34
+                                  );
+
+    box-shadow: inset 0 0 0 1px alpha (#fff, 0.05),
+                inset 0 1px 0 0 alpha (#fff, 0.25),
+                inset 0 -1px 0 0 alpha (#fff, 0.10),
+                0 1px 0 0 alpha (#fff, 0.15);
+
+    border-color: shade (#c92e34, 0.90);
+}
+
+.destructive-action.button:backdrop,
+.titlebar .destructive-action.button:backdrop {
+    background-image: linear-gradient(to bottom,
+                                  shade (#c92e34, 1.40),
+                                  shade (#c92e34, 1.30)
+                                  );
+    border-color: #c92e34;
+}
+
+.destructive-action.button GtkLabel,
+.destructive-action.button Gtklabel:prelight,
+.destructive-action.button GtkImage,
+.destructive-action.button GtkImage:prelight,
+.titlebar .destructive-action.button GtkLabel,
+.titlebar .destructive-action.button Gtklabel:prelight,
+.titlebar .destructive-action.button.image-button GtkImage {
+    color: #FFF;
+    text-shadow: 0 1px alpha (#000, 0.2);
+    icon-shadow: 0 1px alpha (#000, 0.2);
+}
+
+.titlebar .destructive-action.button GtkLabel:backdrop,
+.titlebar .destructive-action.button.image-button GtkImage:backdrop {
+    color: shade (#c92e34, 1.90);
+    text-shadow: none;
+    icon-shadow: none;
+}
+
+.destructive-action.button:insensitive {
+    background-image: none;
+    background-color: transparent;
+    border-color: alpha (#000, 0.20);
+}
+
+.destructive-action.button:insensitive GtkLabel {
+    text-shadow: 0 1px alpha (#fff, 0.4);
+    color: mix(#333, shade (#FFF, 0.96), 0.6);
+}
+
+.toolbar .destructive-action.button:insensitive,
+.titlebar .destructive-action.button:insensitive {
+    background-image: linear-gradient(to bottom,
+                                  alpha (#fff, 0.05),
+                                  alpha (#000, 0.05)
+                                  );
+
+    border-color: alpha (#000, 0.20);
+}
+
+.destructive-action.button:active,
+.destructive-action.button:active:hover,
+.titlebar .destructive-action.button:active,
+.titlebar .destructive-action.button:active:hover {
+    background-image: linear-gradient(to bottom,
+                                  shade (#c92e34, 1.20),
+                                  #c92e34
+                                  );
+
+    border-color: shade (#c92e34, 0.85);
+}

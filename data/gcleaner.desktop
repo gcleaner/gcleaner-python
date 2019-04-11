@@ -1,0 +1,17 @@
+[Desktop Entry]
+Version=1.0
+Name=GCleaner
+GenericName=System Cleaner
+Comment=A Cleaner for the GNU/Linux Operating System
+Exec=gcleaner
+Icon=gcleaner
+Terminal=false
+Type=Application
+Categories=GTK;System;Utility;
+StartupNotify=true
+Actions=AboutDialog;
+
+[Desktop Action AboutDialog]
+Exec=gcleaner --version
+Name=About GCleaner
+Name[es]=Acerca de GCleaner
