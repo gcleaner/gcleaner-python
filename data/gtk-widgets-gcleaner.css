@@ -98,21 +98,21 @@ GtkOverlay .suggested-action.button {
 }
 
 .suggested-action.button GtkLabel,
-.suggested-action.button GtkLabel:prelight {
+.suggested-action.button GtkLabel:hover {
     color: #FFF;
     text-shadow: 0 1px alpha (#000, 0.3);
-    icon-shadow: 0 1px alpha (#000, 0.3);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.3);
 }
 
-.suggested-action.button:insensitive {
+.suggested-action.button:disabled {
     border-color: alpha (#000, 0.20);
     background-image: none;
     background-color: transparent;
 }
 
-.suggested-action.button GtkLabel:insensitive {
+.suggested-action.button GtkLabel:disabled {
     text-shadow: 0 1px alpha (#fff, 0.3);
-    icon-shadow: 0 1px alpha (#fff, 0.3);
+    -gtk-icon-shadow: 0 1px alpha (#fff, 0.3);
     color: mix(#333, shade (#FFF, 0.96), 0.6);
 }
 
@@ -155,37 +155,37 @@ GtkOverlay .suggested-action.button {
 }
 
 .destructive-action.button GtkLabel,
-.destructive-action.button Gtklabel:prelight,
+.destructive-action.button Gtklabel:hover,
 .destructive-action.button GtkImage,
-.destructive-action.button GtkImage:prelight,
+.destructive-action.button GtkImage:hover,
 .titlebar .destructive-action.button GtkLabel,
-.titlebar .destructive-action.button Gtklabel:prelight,
+.titlebar .destructive-action.button Gtklabel:hover,
 .titlebar .destructive-action.button.image-button GtkImage {
     color: #FFF;
     text-shadow: 0 1px alpha (#000, 0.2);
-    icon-shadow: 0 1px alpha (#000, 0.2);
+    -gtk-icon-shadow: 0 1px alpha (#000, 0.2);
 }
 
 .titlebar .destructive-action.button GtkLabel:backdrop,
 .titlebar .destructive-action.button.image-button GtkImage:backdrop {
     color: shade (#c92e34, 1.90);
     text-shadow: none;
-    icon-shadow: none;
+    -gtk-icon-shadow: none;
 }
 
-.destructive-action.button:insensitive {
+.destructive-action.button:disabled {
     background-image: none;
     background-color: transparent;
     border-color: alpha (#000, 0.20);
 }
 
-.destructive-action.button:insensitive GtkLabel {
+.destructive-action.button:disabled GtkLabel {
     text-shadow: 0 1px alpha (#fff, 0.4);
     color: mix(#333, shade (#FFF, 0.96), 0.6);
 }
 
-.toolbar .destructive-action.button:insensitive,
-.titlebar .destructive-action.button:insensitive {
+.toolbar .destructive-action.button:disabled,
+.titlebar .destructive-action.button:disabled {
     background-image: linear-gradient(to bottom,
                                   alpha (#fff, 0.05),
                                   alpha (#000, 0.05)
