@@ -29,6 +29,7 @@ class ToolbarOfWindow(Gtk.Toolbar):
         super().__init__()
 
         # Constructor Variables
+        self.__app = app
         self.__complete_system_specs = ""
 
         """Class property to give ToolBar aspect of Ubuntu
@@ -89,13 +90,13 @@ class ToolbarOfWindow(Gtk.Toolbar):
         """Here define an Menu Model and
 		add it to appmenu Button"""
         self.__menumodel = Gio.Menu()
-        self.__menumodel.append("About...", "win.about")
+        self.__menumodel.append("About...", "app.about")
         self.__appmenu_button.set_menu_model(self.__menumodel)
 
         # Here we define the Actions
-        #self.__about_action = Gio.SimpleAction("about", None)
-        #self.__about_action.activate.connect(self.about_callback)
-        #self.__app.main_window.add_action(self.__about_action)
+        self.__about_action = Gio.SimpleAction.new("about", None)
+        self.__about_action.connect("activate", self.__app.about_callback)
+        self.__app.add_action(self.__about_action)
 
         # BOXES
         # For Icon

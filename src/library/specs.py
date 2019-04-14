@@ -90,8 +90,10 @@ class Specs(object):
                 self.__graphics = "Video AMD"
             elif "Radeon" in self.__result:
                 self.__graphics = "Video AMD Radeon"
+            elif "VMware" in self.__result:
+                self.__graphics = "Video VMware"
             else:
-                self.__graphics = "VIDEO DESCONOCIDO"
+                self.__graphics = "Video Generic"
 
         except Exception as err:
             print("ORG.GCLEANER.APP.SPECS: [ERROR:: Video: ", str(err) + "]")
@@ -144,6 +146,12 @@ class Specs(object):
                     self.__codename = self.__line.replace ("VERSION_CODENAME=", "");
                     self.__codename = self.__codename.replace("\n", "")
                     self.__codename = self.__codename.capitalize()
+                elif self.__codename == "" and "VARIANT_ID=" in self.__line:
+                    self.__codename = self.__line.replace ("VARIANT_ID=", "");
+                    self.__codename = self.__codename.replace("\n", "")
+                    self.__codename = self.__codename.capitalize()
+                    if "\"" in self.__codename:
+                        self.__codename = self.__codename.replace("\"", "")
 
         except Exception as err:
             print("ORG.GCLEANER.APP.SPECS: [ERROR:: OS: /etc/os-release file not found]")

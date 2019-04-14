@@ -80,13 +80,13 @@ class HeaderBarOfWindow(Gtk.HeaderBar):
         add it to appmenu Button.
         """
         self.__menu_model = Gio.Menu()
-        self.__menu_model.append("About...", "win.about")
+        self.__menu_model.append("About...", "app.about")
         self.__appmenu_button.set_menu_model(self.__menu_model)
 
         # Here we define the Actions
-        #self.__about_action = Gio.SimpleAction("about", None)
-        #self.__about_action.activate.connect(self.about_callback)
-        #self.__app.add_action(self.__about_action)
+        self.__about_action = Gio.SimpleAction.new("about", None)
+        self.__about_action.connect("activate", self.__app.about_callback)
+        self.__app.add_action(self.__about_action)
 
         # BOXES
         # to assemble the header
@@ -125,10 +125,4 @@ class HeaderBarOfWindow(Gtk.HeaderBar):
         self.pack_start(self.__item)
         self.pack_end(self.__appmenu_button)
         self.set_show_close_button(True)
-
-    # ACTIONS CALLBACKS HERE
-    def about_callback(simple: Gio.SimpleAction, parameter=None):
-            #self.__about = new GCleaner.Widgets.About()
-            #self.__about.run()
-            pass
 
