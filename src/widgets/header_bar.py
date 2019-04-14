@@ -95,11 +95,11 @@ class HeaderBarOfWindow(Gtk.HeaderBar):
         self.__specs_os_box     = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
         # boxes for elements
-        self.__icon_box     = Gtk.Box(Gtk.Orientation.HORIZONTAL, 0)
-        self.__app_name_box	= Gtk.Box(Gtk.Orientation.HORIZONTAL, 0)
-        self.__version_box  = Gtk.Box(Gtk.Orientation.HORIZONTAL, 0)
-        self.__os_box       = Gtk.Box(Gtk.Orientation.HORIZONTAL, 0)
-        self.__specs_box    = Gtk.Box(Gtk.Orientation.HORIZONTAL, 0)
+        self.__icon_box     = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        self.__app_name_box	= Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.__version_box  = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.__os_box       = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.__specs_box    = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
 
         # PACKAGING
         # Packaging widgets
@@ -110,13 +110,18 @@ class HeaderBarOfWindow(Gtk.HeaderBar):
         self.__specs_box.pack_start(self.__system_specs, False, True, 0)
 
         # Packaging boxes
-        self.__name_version_box.pack_start(self.__app_name_box, False, True, 0)
-        self.__name_version_box.pack_start(self.__version_box, False, True, 0)
-        self.__specs_os_box.pack_start(self.__os_box, False, True, 0)
-        self.__specs_os_box.pack_start(self.__specs_box, False, True, 0)
+        self.__name_version_box.pack_start(self.__app_name_box, True, True, 0)
+        self.__name_version_box.pack_start(self.__version_box, True, True, 0)
+        self.__specs_os_box.pack_start(self.__os_box, True, True, 0)
+        self.__specs_os_box.pack_start(self.__specs_box, True, True, 0)
         self.__container_box.pack_start(self.__icon_box, False, True, 6)
         self.__container_box.pack_start(self.__name_version_box, False, True, 6)
         self.__container_box.pack_start(self.__specs_os_box, False, True, 6)
+
+        # Configure Vertical Align of Certain Boxes
+        self.__specs_os_box.set_valign(Gtk.Align.FILL)
+        self.__name_version_box.set_valign(Gtk.Align.FILL)
+        self.__container_box.set_valign(Gtk.Align.FILL)
 
         self.__item = Gtk.ToolItem()
         self.__item.add(self.__container_box)
