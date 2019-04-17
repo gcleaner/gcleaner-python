@@ -27,7 +27,7 @@ from widgets.toolbar import ToolbarOfWindow
 
 class GCleaner(Gtk.ApplicationWindow):
 
-     def __init__(self, app, *args, **kwargs):
+    def __init__(self, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         # Settings for save the GCleaner state
@@ -104,6 +104,19 @@ class GCleaner(Gtk.ApplicationWindow):
         print("ORG.GCLEANER.APP: [USUARIO: %s]" % (self.__user_home))
 
         # Add the 'main window box' to the main window (Gtk.Window)
+        self.connect("delete_event", self.on_delete_event)
         self.add(self.__main_window_box)
         self.show_all()
+
+    def on_delete_event(self, action, param):
+        self.__x = self.get_position()[0]
+        self.__y = self.get_position()[1]
+        self.__width = self.get_size()[0]
+        self.__height = self.get_size()[1]
+
+        # Save values into GSCHEMA
+        self.__settings.set_int ("opening-x", self.__x)
+        self.__settings.set_int ("opening-y", self.__y)
+        self.__settings.set_int ("window-width", self.__width)
+        self.__settings.set_int ("window-height", self.__height)
 
