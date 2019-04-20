@@ -25,7 +25,7 @@ class Constants:
     PKGDATADIR     = "/usr/share/gcleaner";
     PROGRAM_NAME   = "GCleaner";
     RELEASE_NAME   = "Bosch Aerotwin";
-    VERSION        = "0.02.133";
+    VERSION        = "0.02.139";
     VERSION_INFO   = "Initial Release of GCleaner.";
     EXEC_NAME      = "gcleaner";
     APP_LAUNCHER   = "gcleaner.desktop";

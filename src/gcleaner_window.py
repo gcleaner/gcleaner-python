@@ -19,10 +19,11 @@ with GCleaner. If not, see http://www.gnu.org/licenses/.
 import os
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk, Gio, GLib, Gdk
 from constants import Constants
 from widgets.header_bar import HeaderBarOfWindow
 from widgets.toolbar import ToolbarOfWindow
+from widgets.sidebar import Sidebar
 
 
 class GCleaner(Gtk.ApplicationWindow):
@@ -51,6 +52,29 @@ class GCleaner(Gtk.ApplicationWindow):
         # BOXES
         # Box that will contain the rest of the boxes (this is adjusted to the window)
         self.__main_window_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        # Box containing the Sidebar, the separator and the remaining box info_action_box
+        self.__content_box     = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+        # OWN WIDGETS
+        self.__sidebar = Sidebar(self)
+        self.__sidebar.get_style_context().add_class("Sidebar")
+
+        """ This EventBox is created to color the
+        background of the Box (Sidebar) in GTK+ <= 3.10 """
+        self.__event_sidebar = Gtk.EventBox()
+        self.__event_sidebar.add(self.__sidebar)
+        self.__event_sidebar.get_style_context().add_class("SidebarEv")
+        # The color is created in RGBA
+        self.__colour = Gdk.RGBA()
+        self.__colour.parse("103,103,103,1.0")
+        """ OLD METHOD
+        self.__colour.porps.red = 103.0
+        self.__colour.porps.green = 103.0
+        self.__colour.porps.blue = 103.0
+        """
+        # Transparency
+        self.__colour.alpha = 1.0
+        self.__event_sidebar.override_background_color(Gtk.StateFlags.NORMAL, self.__colour)
 
         # PACKAGING
         """
@@ -96,6 +120,12 @@ class GCleaner(Gtk.ApplicationWindow):
             # Add the Toolbar to the 'main window box'
             self.__main_window_box.pack_start(self.__toolbar, False, True, 0)
 
+        # Content Box
+        self.__content_box.pack_start(self.__event_sidebar, False, True, 0)
+
+        # Final assembly
+        self.__main_window_box.pack_start(self.__content_box, True, True, 0)
+
         # ************ TEMPORARY, then erase ******************* #
         self.__user_home = os.popen("env | grep 'HOME='").readlines()
         self.__user_home_parts = self.__user_home[0].split('=')
@@ -115,8 +145,14 @@ class GCleaner(Gtk.ApplicationWindow):
         self.__height = self.get_size()[1]
 
         # Save values into GSCHEMA
-        self.__settings.set_int ("opening-x", self.__x)
-        self.__settings.set_int ("opening-y", self.__y)
-        self.__settings.set_int ("window-width", self.__width)
-        self.__settings.set_int ("window-height", self.__height)
+        self.__settings.set_int("opening-x", self.__x)
+        self.__settings.set_int("opening-y", self.__y)
+        self.__settings.set_int("window-width", self.__width)
+        self.__settings.set_int("window-height", self.__height)
+
+        self.__settings.set_boolean("analyzechrome", self.__sidebar.check_chrome.get_active())
+        self.__settings.set_boolean("analyzepapelera", self.__sidebar.check_trash.get_active())
+
+    def get_settings(self):
+        return self.__settings
 
