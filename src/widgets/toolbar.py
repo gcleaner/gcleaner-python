@@ -82,7 +82,15 @@ class ToolbarOfWindow(Gtk.Toolbar):
 		this image to MenuButton and resize it."""
         self.__appmenu_button = Gtk.MenuButton()
         self.__gear_icon = Gtk.Image()
-        self.__gear_icon.set_from_icon_name("open-menu", Gtk.IconSize.LARGE_TOOLBAR)
+
+        try:
+            self.__gear_pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                "/usr/share/gcleaner/media/settings32.svg", 32, 32, False)
+            self.__gear_icon.set_from_pixbuf(self.__gear_pixbuf)
+        except Exception as err:
+            print("ORG.GCLEANER.APP.TOOLBAR: [GLIB::ERROR CREATING PIXBUF ICON]")
+            print(">>> Check path: /usr/share/gcleaner/media/settings32.svg")
+
         self.__appmenu_button.set_image(self.__gear_icon)
         self.__appmenu_button.set_size_request(32, 32)
         self.__appmenu_button.get_style_context().add_class("about_btn")

@@ -31,8 +31,13 @@
 	color: #C3C3C3;
 }
 
-/*Dark HeaderBar Style (Uncomment all class .csd)*/
-/*.csd {
+/*
+ * Dark HeaderBar Style (Uncomment all class .csd)
+ *
+ */
+
+/*
+.csd {
 	background-image: -gtk-gradient (linear, left top, left bottom, from (shade (#3A4043, 1.00)), to (shade (#303537, 1.00)));
 	color: #FFFFFF;
 	border-color: #2E2E2E;
@@ -55,14 +60,15 @@
 }
 
 .csd:backdrop {
-	color: #C3C3C3;
-}*/
+    color: #C3C3C3;
+}
+*/
 
-.about_btn {
-    background-image: none;
-    border-color: transparent;
+.about_btn GtkImage, .Toolbar .about_btn {
+    background-color: #676767;
+    border-color: #676767;
     border-style: solid;
-    box-shadow: none;
+    box-shadow: 0px 0px 0px #676767;
 }
 
 .Toolbar {
