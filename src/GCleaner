@@ -23,6 +23,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, Gdk
 from constants import Constants
 from gcleaner_window import GCleaner
+from widgets.about import About
 
 
 class Application(Gtk.Application):
@@ -56,10 +57,8 @@ class Application(Gtk.Application):
 
     # ACTIONS CALLBACKS HERE
     def about_callback(self, action, param):
-        #self.__about = new GCleaner.Widgets.About()
-        #self.__about.run()
-        about_dialog = Gtk.AboutDialog(transient_for=self.window, modal=True)
-        about_dialog.present()
+        about = About()
+        about.run()
 
     def on_quit(self, action, param):
         self.quit()
@@ -78,7 +77,7 @@ except Exception as err:
 
 if len(sys.argv) > 1:
     if sys.argv[1] == "--version" or sys.argv[1] == "-version":
-        about = GCleanerAbout()
+        about = About()
         about.run()
         about.connect("destroy", Gtk.main_quit)
 
