@@ -31,9 +31,9 @@ class GCleaner(Gtk.ApplicationWindow):
     def __init__(self, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # VARS
         # Settings for save the GCleaner state
         self.__settings = Gio.Settings("org.gcleaner")
-
         """Boolean value that determines if use or not
         use HeaderBar according to the desktop environment"""
         self.__use_headerbar = False
@@ -44,7 +44,6 @@ class GCleaner(Gtk.ApplicationWindow):
         self.set_default_size(self.__settings.get_int("window-width"),
                               self.__settings.get_int("window-height"))
         self.set_title(Constants.PROGRAM_NAME)
-        #self.set_application(self)
 
         # Application icon
         self.props.icon_name = "gcleaner"
@@ -54,6 +53,44 @@ class GCleaner(Gtk.ApplicationWindow):
         self.__main_window_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         # Box containing the Sidebar, the separator and the remaining box info_action_box
         self.__content_box     = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        # Box containing the spinner, the progress bar and the % of the progress
+        self.__progress_box    = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        # Box containing the Gtk.ScrolledWindow of Results
+        self.__result_box      = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        # Box that will hold the buttons to scan and clean
+        self.__buttons_box     = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        # Box containing the __progress_box, __result_box and __buttons_box
+        self.__info_action_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        # Box containing the Gtk.Spinner, and Gtk.Images of Status Notifications
+        self.__status_box      = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+
+        # BUTTONS
+        self.__scan_button  = Gtk.Button.new_with_label(" Scan ")
+        self.__clean_button = Gtk.Button.new_with_label(" Clean ")
+        """ Initial state of the buttons
+        (Scan painted blue and clear disabled)
+        """
+        # Paint the Button of blue (With Adwaita theme, depends of the Gtk Theme used)
+        self.__scan_button.get_style_context().add_class("suggested-action")
+        # Disable clean button
+        self.__clean_button.set_sensitive(false)
+
+        # LABELS
+        self.__percentage_progress = Gtk.Label("")
+        self.__percentage_progress.set_markup("<b>0%</b>")
+
+        # SEPARATORS
+        self.__content_separator       = Gtk.Separator(Gtk.Orientation.VERTICAL)
+        self.__result_separator_left   = Gtk.Separator(Gtk.Orientation.VERTICAL)
+        self.__result_separator_right  = Gtk.Separator(Gtk.Orientation.VERTICAL)
+        self.__result_separator_top	   = Gtk.Separator(Gtk.Orientation.HORIZONTAL)
+        self.__result_separator_bottom = Gtk.Separator(Gtk.Orientation.HORIZONTAL)
+
+        # IMAGES
+        self.__info_img = Gtk.Image()
+        self.__info_img.set_from_icon_name("dialog-information", Gtk.IconSize.MENU)
+        self.__success_img = Gtk.Image()
+        self.__success_img.set_from_icon_name("dialog-ok", Gtk.IconSize.MENU)
 
         # OWN WIDGETS
         self.__sidebar = Sidebar(self)
@@ -75,6 +112,30 @@ class GCleaner(Gtk.ApplicationWindow):
         # Transparency
         self.__colour.alpha = 1.0
         self.__event_sidebar.override_background_color(Gtk.StateFlags.NORMAL, self.__colour)
+
+        # OTHERS WIDGETS
+        # Widgets for __status_box
+        self.__scanning_spin = Gtk.Spinner()
+        self.__progress_bar  = Gtk.ProgressBar()
+
+        # LIST STORE - SCAN/CLEANING INFORMATION
+        self.__result_list = Gtk.ListStore(str, str, str)
+        self.__result_view = Gtk.TreeView.new_with_model(self.__result_list)
+        self.__result_window = Gtk.ScrolledWindow(None, None)
+        self.__result_window.add(self.__result_view)
+        """ Results Columns ----------------------------------------------------
+        """
+        self.__concept_rendr = Gtk.CellRendererText()
+        self.__concept_col   = Gtk.TreeViewColumn("Concept", self.__concept_rendr, text=0)
+        self.__result_view.append_column(self.__concept_col)
+
+        self.__size_rendr = Gtk.CellRendererText()
+        self.__size_col   = Gtk.TreeViewColumn("Size", self.__size_rendr, text=1)
+        self.__result_view.append_column(self.__size_col)
+
+        self.__quantity_rendr = Gtk.CellRendererText()
+        self.__quantity_col   = Gtk.TreeViewColumn("Quantity", self.__quantity_rendr, text=2)
+        self.__result_view.append_column(self.__quantity_col)
 
         # PACKAGING
         """
