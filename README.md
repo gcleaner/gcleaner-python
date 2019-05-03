@@ -7,7 +7,7 @@ GCleaner is a beautiful and fast system cleaner for Ubuntu or Fedora based distr
 
 Writen in Python, GTK+, and GLib/GIO for the purpose that the users feel "at home" in the world of GNU/Linux.
 
-__registered:__ 04 May 2015 by Juan Pablo Lozano
+__Registered:__ 04 May 2015 by Juan Pablo Lozano
 
 __Vala Version:__ [https://launchpad.net/gcleaner](https://launchpad.net/gcleaner)
 
