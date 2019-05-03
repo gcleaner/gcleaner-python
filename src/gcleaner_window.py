@@ -73,18 +73,18 @@ class GCleaner(Gtk.ApplicationWindow):
         # Paint the Button of blue (With Adwaita theme, depends of the Gtk Theme used)
         self.__scan_button.get_style_context().add_class("suggested-action")
         # Disable clean button
-        self.__clean_button.set_sensitive(false)
+        self.__clean_button.set_sensitive(False)
 
         # LABELS
         self.__percentage_progress = Gtk.Label("")
         self.__percentage_progress.set_markup("<b>0%</b>")
 
         # SEPARATORS
-        self.__content_separator       = Gtk.Separator(Gtk.Orientation.VERTICAL)
-        self.__result_separator_left   = Gtk.Separator(Gtk.Orientation.VERTICAL)
-        self.__result_separator_right  = Gtk.Separator(Gtk.Orientation.VERTICAL)
-        self.__result_separator_top	   = Gtk.Separator(Gtk.Orientation.HORIZONTAL)
-        self.__result_separator_bottom = Gtk.Separator(Gtk.Orientation.HORIZONTAL)
+        self.__content_separator       = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
+        self.__result_separator_left   = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
+        self.__result_separator_right  = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
+        self.__result_separator_top	   = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        self.__result_separator_bottom = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
 
         # IMAGES
         self.__info_img = Gtk.Image()
@@ -181,8 +181,35 @@ class GCleaner(Gtk.ApplicationWindow):
             # Add the Toolbar to the 'main window box'
             self.__main_window_box.pack_start(self.__toolbar, False, True, 0)
 
+        # PROGRESS_BAR and SPINNER
+        self.__status_box.pack_start(self.__scanning_spin, True, True, 0)
+        self.__progress_box.pack_start(self.__status_box, False, True, 8)
+        self.__progress_box.pack_start(self.__progress_bar, True, True, 8)
+        self.__progress_box.pack_start(self.__percentage_progress, False, True, 8)
+
+        # Scanning and Cleaning RESULTS
+        self.__result_box.pack_start(self.__result_separator_left, False, True, 0)
+        self.__result_box.pack_start(self.__result_window, True, True, 0)
+        self.__result_box.pack_start(self.__result_separator_right, False, True, 0)
+
+        # Buttons
+        self.__buttons_box.pack_start(self.__scan_button, False, False, 0)
+        self.__buttons_box.pack_end(self.__clean_button, False, False, 0)
+
+        # Information, Results and Actions
+        self.__info_action_box.pack_start(self.__progress_box, False, True, 8)
+        self.__info_action_box.pack_start(self.__result_separator_top, False, True, 0)
+        self.__info_action_box.pack_start(self.__result_box, True, True, 0)
+        # Separador entre la botonera y los resultados
+        self.__info_action_box.pack_start(self.__result_separator_bottom, False, True, 0)
+        self.__info_action_box.pack_start(self.__buttons_box, False, True, 8)
+
         # Content Box
         self.__content_box.pack_start(self.__event_sidebar, False, True, 0)
+        # Visible Gtk.Separator beetwen Sidebar and __info_action_box
+        self.__content_box.pack_start(self.__content_separator, False, True, 0)
+        # Packaging the box with progress bar, result information and buttons
+        self.__content_box.pack_start(self.__info_action_box, True, True, 8)
 
         # Final assembly
         self.__main_window_box.pack_start(self.__content_box, True, True, 0)
@@ -193,6 +220,23 @@ class GCleaner(Gtk.ApplicationWindow):
         self.__user_home = self.__user_home_parts[1]
         self.__user_home = self.__user_home.replace("\n", "")
         print("ORG.GCLEANER.APP: [USUARIO: %s]" % (self.__user_home))
+
+        """ Here the GLib.MainLoop is a Loop for draw the GUI.
+            With this Class we avoid freezing the user interface.
+        """
+        self.__loop = GLib.MainLoop()
+
+        # Setting up the values for progress_bar and percentage label
+        self.__progress_fraction = 0.0
+        self.__progress_number = 0.0
+
+        """ Scan button actions and Logic
+        """
+        self.__scan_button.connect("clicked", self.on_clicked_scan)
+
+        """ Clean button actions and Logic
+        """
+        self.__clean_button.connect("clicked", self.on_clicked_clean)
 
         # Add the 'main window box' to the main window (Gtk.Window)
         self.connect("delete_event", self.on_delete_event)
@@ -216,4 +260,10 @@ class GCleaner(Gtk.ApplicationWindow):
 
     def get_settings(self):
         return self.__settings
+
+    def on_clicked_scan(self, button):
+        print("Scan Button Clicked!")
+
+    def on_clicked_clean(self, button):
+        print("Clean Button Clicked!")
 
