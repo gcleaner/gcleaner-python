@@ -215,11 +215,7 @@ class GCleaner(Gtk.ApplicationWindow):
         self.__main_window_box.pack_start(self.__content_box, True, True, 0)
 
         # ************ TEMPORARY, then erase ******************* #
-        self.__user_home = os.popen("env | grep 'HOME='").readlines()
-        self.__user_home_parts = self.__user_home[0].split('=')
-        self.__user_home = self.__user_home_parts[1]
-        self.__user_home = self.__user_home.replace("\n", "")
-        print("ORG.GCLEANER.APP: [USUARIO: %s]" % (self.__user_home))
+        print("ORG.GCLEANER.APP: [USUARIO: %s]" % (Constants.USERHOMEDIR))
 
         """ Here the GLib.MainLoop is a Loop for draw the GUI.
             With this Class we avoid freezing the user interface.
