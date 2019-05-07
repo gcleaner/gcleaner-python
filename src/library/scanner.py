@@ -22,23 +22,23 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import GLib, Gio
 
 
-def to_file_size_format(bytes):
+def to_human_format(bytes):
     size = 0.0
     size_format = ""
 
     size = bytes / 1000
     if size < 1000:
-        size = round((size * 100) / 100)
+        size = round(size, 2)
         size_format = str(size) + " KB"
     else:
         size = size / 1000
         if size < 1000:
-            size = round((size * 100) / 100)
+            size = round(size, 2)
             size_format = str(size) + " MB"
         else:
             size = size / 1000;
             if size < 1000:
-                size = round((size * 100) / 100)
+                size = round(size, 2)
                 size_format = str(size) + " GB"
 
     return size_format
@@ -46,71 +46,37 @@ def to_file_size_format(bytes):
 
 class Scanner():
 
-    # Local Variables
-    files = 0
-    scanned_size = 0
-
     def __init__(self):
-        files = 0
-        scanned_size = 0
+        # Global Scanned Values
+        self.files = 0
+        self.scanned_size = 0
 
     """ Function to search for files and folder size
     """
-    def list_folder_content(self, folder, space = "", cancellable = None, inventory = None):
-        print("__ITERATION__")
+    def scan_folder(self, start_folder):
         data = []
-        enumerator = Gio.FileEnumerator()
-
-        try:
-            print("__WITHIN TRY__")
-            enumerator = folder.enumerate_children(
-                                    'standard::*',
-                                    Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-                                    cancellable)
-            print("__AFTER ENUM__")
-        except Exception as err:
-            print("ORG.GCLEANER.LIB.SCANNER: [WARNING: Unable to access to the path "
-                   + str(folder.get_path()))
-            print(">>> " + str(err))
+        if start_folder == "":
+            print("ORG.GCLEANER.LIB.SCANNER [INVALID DIRECTORY: " + str(start_folder) + "]")
             data.append(0)
             data.append(0)
-            return data
-        print("__BEFORE WHILE__")
-        info = enumerator.next_file(cancellable)
-        while cancellable.is_cancelled() == False and info != None:
-            if info.get_file_type() == Gio.FileType.DIRECTORY:
-                subdir = folder.resolve_relative_path(info.get_name())
-                list_folder_content(subdir, space + " ", cancellable, inventory)
-                # Here we can count folders
-            else:
-                # Count Files
-                files = files + 1
-                scanned_size = scanned_size + info.get_size()
-                inventory.add(folder.get_uri() + "/" + info.get_name())
-            info = enumerator.next_file(cancellable)
-
-        if cancellable.is_cancelled():
-            raise Exception("ORG.GCLEANER.LIB.SCANNER: [Operation was cancelled]")
-
-        data.append(files)
-        data.append(scanned_size)
-        return data
-
-    def scan_folder(self, folder_path, inventory = None):
-        data = None
-
-        # Set Local Variables
-        files = 0
-        scanned_size = 0
-        if folder_path == "":
-            print("ORG.GCLEANER.LIB.SCANNER [INVALID DIRECTORY: " + str(folder_path) + "]")
         else:
-            folder_to_scan = Gio.File.new_for_path(folder_path)
-            try:
-                data = self.list_folder_content(folder_to_scan, "", Gio.Cancellable(), inventory)
-            except Exception as err:
-                print("ORG.GCLEANER.LIB.SCANNER [Error: " + str(err) + "]")
-                print(">>> Check path: " + str(folder_path))
-
+            # Current Folder Values
+            folder_size = 0
+            folder_files = 0
+            for dirpath, dirnames, filenames in os.walk(start_folder):
+                for f in filenames:
+                    file_path = os.path.join(dirpath, f)
+                    self.scanned_size += os.path.getsize(file_path)
+                    folder_size += os.path.getsize(file_path)
+                    folder_files += 1
+                    self.files += 1
+            data.append(folder_files)
+            data.append(folder_size)
         return data
+
+    def get_files(self):
+        return self.files
+
+    def get_scanned_size(self):
+        return self.scanned_size
 
