@@ -16,7 +16,7 @@ Public License for more details.
 You should have received a copy of the GNU General Public License along
 with GCleaner. If not, see http://www.gnu.org/licenses/.
 """
-import os
+import os, time
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, GLib, Gdk
@@ -28,6 +28,14 @@ from widgets.sidebar import Sidebar
 
 class GCleaner(Gtk.ApplicationWindow):
 
+    # Global Variables
+    """ Set to 0 Counter Files and Accumulator Size
+        Of All Items checked in SideBar
+    """
+    counter = 0
+    accumulator = 0
+
+
     def __init__(self, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -37,6 +45,7 @@ class GCleaner(Gtk.ApplicationWindow):
         """Boolean value that determines if use or not
         use HeaderBar according to the desktop environment"""
         self.__use_headerbar = False
+        self.__success_icon = 0
 
         # MAIN WINDOW PROPERTIES
         self.move(self.__settings.get_int("opening-x"),
@@ -258,7 +267,45 @@ class GCleaner(Gtk.ApplicationWindow):
         return self.__settings
 
     def on_clicked_scan(self, button):
-        print("Scan Button Clicked!")
+        # Clean the results list
+        self.__result_list.clear()
+        # Remove the blue color of the button
+        self.__scan_button.get_style_context().remove_class("suggested-action")
+        # Disable the scan button
+        self.__scan_button.set_sensitive(False)
+        """ Function to show childrens of GtkBox:
+        childrens = self.__status_box.get_children()
+        for children in childrens:
+            print("Children: " + str(children.get_name()))
+        """
+        self.__status_box.remove(self.__success_img)
+        if self.__success_icon == 1:
+            self.__status_box.add(self.__scanning_spin)
+            self.__success_icon = 0
+        self.__scanning_spin.props.active = True
+        # --------------> 0%
+        self.__progress_bar.set_fraction(0)
+        self.__progress_fraction = 0
+        self.__progress_number = 0
+        # Set to 0 both for each scan process
+        counter = 0
+        accumulator = 0
+        self.__progress_fraction += 0.1428571
+        self.__progress_number += 14.28571
+        self.__progress_bar.set_fraction(self.__progress_fraction)
+        self.__percentage_progress.set_markup("<b>" + str(round(self.__progress_number)) + "%</b>")
+        time.sleep(2)
+        self.__progress_fraction += 0.1428571
+        self.__progress_number += 14.28571
+        self.__progress_bar.set_fraction(self.__progress_fraction)
+        self.__percentage_progress.set_markup("<b>" + str(round(self.__progress_number)) + "%</b>")
+        time.sleep(2)
+        self.__progress_fraction = 1.0
+        self.__progress_number = 100.0
+        self.__progress_bar.set_fraction(self.__progress_fraction)
+        self.__percentage_progress.set_markup("<b>" + str(round(self.__progress_number)) + "%</b>")
+        # Quit GtkMainLoop
+        self.__loop.quit()
 
     def on_clicked_clean(self, button):
         print("Clean Button Clicked!")
