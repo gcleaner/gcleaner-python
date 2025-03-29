@@ -1,0 +1,74 @@
+/*
+Copyright 2025 Juan Pablo Lozano
+
+This file is part of GCleaner.
+
+GCleaner is free software: you can redistribute it
+and/or modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+GCleaner is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with GCleaner. If not, see http://www.gnu.org/licenses/.
+*/
+
+/* TOOLBAR */
+.toolbar {
+	color: #FFFFFF;
+	background: #4D4D4D;
+	text-shadow: -1px 1px 0px #2E2E2E;
+	border-color: #4D4D4D;
+	box-shadow: inset 0px 1px 1px #4D4D4D;
+}
+
+.toolbar:backdrop {
+	color: #C3C3C3;
+}
+
+.toolbar-icon {
+    margin-left: 32px;
+    margin-right: 16px;
+}
+
+.about-btn {
+    background: transparent;
+    border: none;
+    margin-right: 16px;
+}
+
+.about-btn:hover GtkImage, .toolbar .about-btn:hover, .about-btn:hover button, .about-btn:active button {
+    border-radius: 50%;
+    background: #2E2E2E;
+}
+
+/* ABOUT */
+.dark, .dark viewport {
+    background-color: #2e3436;
+    color: #ffffff;
+}
+.dark stackswitcher {
+    background-color: transparent;
+}
+
+/* SIDEBAR */
+.sidebar {
+	color: #FFFFFF;
+	background-color: #676767;
+	border-color: #676767; 
+	text-shadow: -1px 1px 0px #4D4D4D;
+    padding: 12px;
+}
+
+.sidebar:backdrop {
+	color: #C3C3C3;
+}
+
+/* PROGRESS BAR */
+.progress-bar * {
+    min-height: 20px;
+}

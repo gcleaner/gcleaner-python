@@ -1,0 +1,8 @@
+polkit.addRule(function(action, subject) {
+    if (
+      action.id == "org.gcleaner.specs.dmidecode" &&
+      subject.isInGroup("users")
+    ) {
+      return polkit.Result.YES;
+    }
+});

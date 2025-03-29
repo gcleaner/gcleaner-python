@@ -1,22 +1,44 @@
-# GCleaner Python
-## GCleaner Ported To Python 3
+# GCleaner
 
-__Website:__ [https://gcleaner.github.io/](https://gcleaner.github.io/)
+GCleaner is a beautiful and fast system cleaner for GNU/Linux distributions. See more information on their website [https://gcleaner.github.io/](https://gcleaner.github.io/)
 
-This version of GCleaner is a rewriten version of GCleaner in Python 3 lang.
+![screenshot](./docs/screenshot.png)
 
-GCleaner is a beautiful and fast system cleaner for Ubuntu or Fedora based distributions.
+This version of GCleaner is a rewriten version using Python 3 lang and GTK+ 4.0.
 
-Writen in Python, GTK+, and GLib/GIO for the purpose that the users feel "at home" in the world of GNU/Linux.
+- Registered by [Juan Pablo Lozano](mailto:libredeb@gmail.com) on May 04, 2015.
+- Starter project: [https://launchpad.net/gcleaner](https://launchpad.net/gcleaner)
 
-__Registered:__ 04 May 2015 by Juan Pablo Lozano
+## How to Get Involved?
 
-__Vala Version:__ [https://launchpad.net/gcleaner](https://launchpad.net/gcleaner)
+There are several ways to contribute to the project, by the moment the goal is to get a functional version of the project. Translations to other languages, bug fixes, among other things will be left for later.
 
+If you want to test the progress of the project and/or contribute with code, follow the steps below:
 
-### Screenshot
+1. Clone the git repository:
+    ```sh
+    git clone https://github.com/gcleaner/gcleaner-python.git
+    ```
 
-![alt text](https://raw.githubusercontent.com/gcleaner/gcleaner-python/master/screenshots/gcleaner_stable_1.png "stable_1 version of GCleaner")
+2. Install development dependencies:
+    - **In Fedora:**
+        ```sh
+        sudo dnf install gtk4-devel python3-gobject-devel polkit dmidecode
+        ```
 
-You are a developer? did you like the project? [Get Involved](https://gcleaner.github.io/get_involved)!
+    - **In Ubuntu:**
+        ```sh
+        sudo apt-get install libgtk-4-dev python-gi-dev pkexec dmidecode
+        ```
 
+3. Use an IDE like Visual Studio Code (recommended) to execute the app or run next command:
+    ```sh
+    python3 gcleaner/application.py
+    ```
+
+## How to inspect a GTK+ Application?
+
+To debug GTK+ widgets, you can use the GTK Widget Inspector, which is a built-in tool that allows you to test CSS changes, check the UI structure, widget properties and more. To launch this tool use any of the following methods:
+
+1. Use the keyboard shortcut `Control` + `Shift` + `I` (or in some cases: `Control` + `Shift` + `D`).
+2. Set the environment variable `GTK_DEBUG=interactive` before launch your application.
