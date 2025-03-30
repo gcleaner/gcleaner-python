@@ -29,7 +29,7 @@ class ToolBar(Gtk.Box):
     def __init__(self, app):
         super().__init__(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self.logger = logging.getLogger(self.__class__.__name__)
-        
+
         self.get_style_context().add_class("toolbar")
 
         # LABELS
@@ -98,7 +98,7 @@ class ToolBar(Gtk.Box):
                 "data/media/settings-menu.svg", 32, 32, False
             )
             self.gear_icon.set_from_pixbuf(self.gear_pixbuf)
-        except Exception as err:
+        except Exception:
             self.logger.warning("Error creating settings menu icon pixbuf")
         self.menu_button.set_child(self.gear_icon)
         self.menu_button.set_size_request(32, 32)
@@ -117,24 +117,48 @@ class ToolBar(Gtk.Box):
 
         # BOXES
         # For Icon
-        self.icon_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.sub_icon_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.icon_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        self.sub_icon_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
 
         # Name and Version
-        self.app_name_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.app_title_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.app_version_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.sub_name_app_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.app_name_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        self.app_title_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        self.app_version_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        self.sub_name_app_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
 
         # Operating System and System specs
-        self.os_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.system_properties_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.specs_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.sub_specs_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.os_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        self.system_properties_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        self.specs_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        self.sub_specs_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
 
         # Help
-        self.help_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.about_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.help_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        self.about_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
 
         # OTHERS TOOLITEMS
         """Separator (Expander), to go expanding the blank space"""

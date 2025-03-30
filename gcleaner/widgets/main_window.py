@@ -20,7 +20,7 @@ import logging
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version("Gio", "2.0")
-from gi.repository import Gtk, Gdk, Gio
+from gi.repository import Gtk, Gio
 from widgets.toolbar import ToolBar
 from widgets.sidebar import Sidebar
 from entities.result import Result
@@ -41,20 +41,32 @@ class MainWindow(Gtk.ApplicationWindow):
             self.settings.get_int("window-width"),
             self.settings.get_int("window-height")
         )
-        
+
         # BOXES
-        # Box that will contain the rest of the boxes (this is adjusted to the window)
-        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        # Box containing the ToolBar, the separator and the remaining box info_action_box
-        self.content_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        # Box containing the spinner, the progress bar and the % of the progress
-        self.progress_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        # Box that will hold the buttons to scan and clean
-        self.buttons_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        # Box containing the progress_box, result_box and buttons_box
-        self.info_action_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        # Box containing the Gtk.Spinner, and Gtk.Images of Status Notifications
-        self.status_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        # Contain the rest of the boxes (this is adjusted to the window)
+        self.main_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        # Contain the ToolBar, a separator and the info_action_box
+        self.content_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        # Contain the spinner, the progress bar and the % of the progress
+        self.progress_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        # Hold the buttons to scan and clean
+        self.buttons_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        # Contain the progress_box, result_box and buttons_box
+        self.info_action_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        # Contain the Gtk.Spinner, and Gtk.Images of Status Notifications
+        self.status_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
 
         # BUTTONS
         self.scan_button = Gtk.Button.new_with_label(" Scan ")
@@ -82,12 +94,20 @@ class MainWindow(Gtk.ApplicationWindow):
         self.percentage_progress.set_markup(f"<b>{self.progress:.2f}%</b>")
 
         # SEPARATORS
-        self.content_separator = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
-        self.buttons_separator = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        self.content_separator = Gtk.Separator(
+            orientation=Gtk.Orientation.VERTICAL
+        )
+        self.buttons_separator = Gtk.Separator(
+            orientation=Gtk.Orientation.HORIZONTAL
+        )
         self.buttons_separator.set_opacity(0)  # not draw
         self.buttons_separator.set_hexpand(True)
-        self.result_separator_top = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
-        self.result_separator_bottom = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        self.result_separator_top = Gtk.Separator(
+            orientation=Gtk.Orientation.HORIZONTAL
+        )
+        self.result_separator_bottom = Gtk.Separator(
+            orientation=Gtk.Orientation.HORIZONTAL
+        )
 
         """ Creates an instance of a customized Toolbar """
         self.toolbar = ToolBar(app)
@@ -130,9 +150,15 @@ class MainWindow(Gtk.ApplicationWindow):
         column_view.set_hexpand(True)
         column_view.set_vexpand(True)
 
-        concept_column = Gtk.ColumnViewColumn(title="Concept", factory=concept_factory)
-        size_column = Gtk.ColumnViewColumn(title="Size", factory=size_factory)
-        quantity_column = Gtk.ColumnViewColumn(title="Quantity", factory=quantity_factory)
+        concept_column = Gtk.ColumnViewColumn(
+            title="Concept", factory=concept_factory
+        )
+        size_column = Gtk.ColumnViewColumn(
+            title="Size", factory=size_factory
+        )
+        quantity_column = Gtk.ColumnViewColumn(
+            title="Quantity", factory=quantity_factory
+        )
 
         for col in (concept_column, size_column, quantity_column):
             col.set_expand(True)
@@ -188,10 +214,10 @@ class MainWindow(Gtk.ApplicationWindow):
         # Add the 'main window box' to the main window (Gtk.Window)
         self.connect("close_request", self.on_delete_event)
         self.set_child(self.main_box)
-    
+
     def get_settings(self):
         return self.settings
-    
+
     def on_delete_event(self, param):
         self.width = self.get_size(Gtk.Orientation.HORIZONTAL)
         self.height = self.get_size(Gtk.Orientation.VERTICAL)
@@ -200,8 +226,12 @@ class MainWindow(Gtk.ApplicationWindow):
         self.settings.set_int("window-width", self.width)
         self.settings.set_int("window-height", self.height)
 
-        self.settings.set_boolean("scan-firefox", self.sidebar.check_firefox.get_active())
-        self.settings.set_boolean("scan-trash", self.sidebar.check_trash.get_active())
+        self.settings.set_boolean(
+            "scan-firefox", self.sidebar.check_firefox.get_active()
+        )
+        self.settings.set_boolean(
+            "scan-trash", self.sidebar.check_trash.get_active()
+        )
 
     def setup_label(self, factory, list_item):
         label = Gtk.Label(xalign=0)

@@ -31,7 +31,26 @@ If you want to test the progress of the project and/or contribute with code, fol
         sudo apt-get install libgtk-4-dev python-gi-dev pkexec dmidecode
         ```
 
-3. Use an IDE like Visual Studio Code (recommended) to execute the app or run next command:
+3. Install GLib schema:
+    ```sh
+    sudo cp data/schemas/org.gcleaner.gschema.xml /usr/share/glib-2.0/schemas/
+    ```
+
+4. Compile GLib schema:
+    ```sh
+    sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+    ```
+
+5. Install Polkit actions and rules:
+    ```sh
+    sudo cp data/polkit/org.gcleaner.specs.dmidecode.policy /usr/share/polkit-1/actions/
+    ```
+    ```sh
+    sudo cp data/polkit/50-gcleaner.rules /etc/polkit-1/rules.d/
+    ```
+    > **NOTE:** more information about Polkit [here](https://polkit.pages.freedesktop.org/polkit/).
+
+6. Use an IDE like Visual Studio Code (recommended) to execute the app or run next command:
     ```sh
     python3 gcleaner/application.py
     ```

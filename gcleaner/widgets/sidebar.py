@@ -20,8 +20,7 @@ import logging
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version("Gio", "2.0")
-from gi.repository import Gtk, GdkPixbuf, GLib, Gio
-from constants import Constants
+from gi.repository import Gtk, Gio
 
 
 class Sidebar(Gtk.Box):
@@ -40,16 +39,22 @@ class Sidebar(Gtk.Box):
         self.app_main_window = window  # Needed to acces GLib settings
 
         # BOXES
-        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.apps_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
-        self.system_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        self.main_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=0
+        )
+        self.apps_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
+        self.system_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
 
         """
         Gtk.Fixed is a container (a kind of Gtk.Box) which can place other
         children Widgets in fixed positions and size in pixels.
         """
         self.fixed_box = Gtk.Fixed()
-        self.fixed_box.put (self.main_box, 0, 0)
+        self.fixed_box.put(self.main_box, 0, 0)
         self.fixed_box.set_vexpand(True)
 
         self.append(self.fixed_box)
@@ -69,7 +74,9 @@ class Sidebar(Gtk.Box):
         firefox_icon = Gtk.Image()
         firefox_icon.set_from_icon_name("firefox")
         firefox_icon.set_icon_size(Gtk.IconSize.NORMAL)
-        firefox_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        firefox_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, spacing=0
+        )
         firefox_label = Gtk.Label.new("Firefox")
         firefox_box.append(firefox_icon)
         firefox_box.append(firefox_label)
@@ -96,7 +103,9 @@ class Sidebar(Gtk.Box):
         self.firefox_file = Gio.File.new_for_path("/usr/bin/firefox")
         if self.firefox_file.query_exists():
             self.main_box.append(self.check_firefox)
-            self.check_firefox.set_active(self.app_main_window.get_settings().get_boolean("scan-firefox"))
+            self.check_firefox.set_active(
+                self.app_main_window.get_settings().get_boolean("scan-firefox")
+            )
 
         self.main_box.append(self.category_separator)
 
@@ -104,4 +113,6 @@ class Sidebar(Gtk.Box):
         self.main_box.append(self.check_trash)
 
         # ACTIVATE REMAINING CHECKBOX
-        self.check_trash.set_active(self.app_main_window.get_settings().get_boolean("scan-trash"))
+        self.check_trash.set_active(
+            self.app_main_window.get_settings().get_boolean("scan-trash")
+        )

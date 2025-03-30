@@ -21,7 +21,7 @@ with GCleaner. If not, see http://www.gnu.org/licenses/.
 def to_human_format(bytes: int) -> str:
     """
     Converts a size in bytes to a readable human format (KB, MB, GB).
-    GNU/Linux uses a format of 1000 instead of 1024 to transform measurements. 
+    GNU/Linux uses a format of 1000 instead of 1024 to transform measurements.
     """
     size = bytes / 1000
     if size < 1000:

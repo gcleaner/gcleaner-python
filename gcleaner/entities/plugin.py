@@ -16,23 +16,20 @@ Public License for more details.
 You should have received a copy of the GNU General Public License along
 with GCleaner. If not, see http://www.gnu.org/licenses/.
 """
+from abc import ABC, abstractmethod
 
 
-class PathsInventory():
-    """
-    A class to store an inventory of all file paths to be cleaned.
-    """
+class Plugin(ABC):
+    """Abstract Base Class for cleaning plugins."""
 
-    def __init__(self):
+    @abstractmethod
+    def scan(self) -> list:
         """
-        Initializes an empty list to store file paths.
+        Retrieve a list the files be cleaned and the disk space to free up.
         """
-        self.paths = []
+        pass
 
-    def add(self, file_path: str):
-        """
-        Adds a file path to the inventory.
-
-        :param file_path: The file path to be added.
-        """
-        self.paths.append(file_path)
+    @abstractmethod
+    def clean(self) -> None:
+        """Perform the cleaning operation."""
+        pass

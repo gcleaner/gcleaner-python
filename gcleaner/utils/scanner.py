@@ -24,7 +24,6 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("GLib", "2.0")
 gi.require_version("Gio", "2.0")
 gi.require_version("Polkit", "1.0")
-
 from gi.repository import Gio, GLib, Polkit
 
 
@@ -58,13 +57,13 @@ class Scanner():
         self.logger = logging.getLogger(self.__class__.__name__)
         self.file_count = 0
         self.total_size = 0
-    
+
     def request_permission(self):
         authority = Polkit.Authority.get_sync(None)
         subject = Polkit.UnixProcess.new_for_owner(os.getpid(), 0, -1)
         action_id = "com.gcleaner.list_directory"
         flags = Polkit.CheckAuthorizationFlags.ALLOW_USER_INTERACTION
-        
+
         result = authority.check_authorization_sync(
             subject, action_id, None, flags, None
         )

@@ -21,7 +21,6 @@ import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version("Gio", "2.0")
 from gi.repository import Gtk, Gio, Gdk
-from constants import Constants
 from widgets.main_window import MainWindow
 from widgets.about import About
 
@@ -50,7 +49,7 @@ class GCleaner(Gtk.Application):
             self.window = MainWindow(self)
 
         self.window.present()
-    
+
     def about_callback(self, simple: Gio.SimpleAction, parameter=None):
         about = About(self.window)
         about.present()
