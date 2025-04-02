@@ -27,7 +27,7 @@ gi.require_version("Polkit", "1.0")
 from gi.repository import Gio, GLib, Polkit
 
 
-class Scanner():
+class FileScanner():
     """
     Scans a directory to count the number of files that will be cleaned
     and calculates the total disk space occupied by the directory.
@@ -73,7 +73,7 @@ class Scanner():
     def scan_directory(
         self, dir: Gio.File, space: str = "",
         cancellable: Gio.Cancellable = None, inventory=None
-    ) -> list:
+    ) -> tuple[int, int]:
         """
         Recursively scans a directory to count files and calculate total size.
 
@@ -89,8 +89,6 @@ class Scanner():
         Returns:
             list: A list containing [file_count, total_size].
         """
-        values = [0, 0]
-
         try:
             enumerator = dir.enumerate_children(
                 "standard::*", Gio.FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
@@ -100,7 +98,7 @@ class Scanner():
             self.logger.warning(
                 f"Unable to access '{dir.get_path()}' ({e.message})"
             )
-            return values
+            return None, None
 
         while True:
             try:
@@ -119,14 +117,11 @@ class Scanner():
                 self.file_count += 1
                 self.total_size += info.get_size()
                 if inventory is not None:
-                    inventory.add(f"{dir.get_uri()}/{info.get_name()}")
+                    inventory.add(f"{dir.get_path()}/{info.get_name()}")
 
-        values[0] = self.file_count
-        values[1] = self.total_size
+        return self.file_count, self.total_size
 
-        return values
-
-    def get_directory_data(self, path: str, inventory) -> list:
+    def get_directory_data(self, path: str, inventory) -> tuple[int, int]:
         """
         Initiates the directory scanning process to count files and calculate
         total size.
@@ -141,7 +136,7 @@ class Scanner():
         """
         if not path:
             self.logger.warning(f"Invalid directory path > {path}")
-            return None
+            return None, None
 
         self.file_count = 0
         self.total_size = 0
@@ -156,4 +151,4 @@ class Scanner():
             self.logger.error(f"{e.message}")
             self.logger.error(f"Check path > {path}")
 
-        return None
+        return None, None

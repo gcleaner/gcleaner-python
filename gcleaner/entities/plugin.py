@@ -16,20 +16,34 @@ Public License for more details.
 You should have received a copy of the GNU General Public License along
 with GCleaner. If not, see http://www.gnu.org/licenses/.
 """
+import logging
 from abc import ABC, abstractmethod
+from pathlib import Path
+from utils.file_scanner import FileScanner
+from utils.inventory import PathsInventory
 
 
 class Plugin(ABC):
     """Abstract Base Class for cleaning plugins."""
 
+    def __init__(self):
+        super().__init__()
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.scanner = FileScanner()
+        self.inventory = PathsInventory()
+
     @abstractmethod
-    def scan(self) -> list:
+    def scan(self) -> tuple[int, int]:
         """
         Retrieve a list the files be cleaned and the disk space to free up.
+        tuple[files, size]
         """
         pass
 
-    @abstractmethod
     def clean(self) -> None:
         """Perform the cleaning operation."""
-        pass
+        for path in self.inventory.paths:
+            try:
+                Path(path).unlink()
+            except Exception as e:
+                self.logger.warning(f"Error deleting {path} > {e}")

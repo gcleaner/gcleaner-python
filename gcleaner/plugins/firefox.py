@@ -25,10 +25,6 @@ from entities.plugin import Plugin
 class FirefoxPlugin(Plugin):
     """GCleaner Plugin to clean up the temporary files of Firefox."""
 
-    def __init__(self):
-        super().__init__()
-        self.profiles = self.get_profiles()
-
     def get_profiles(self) -> list:
         """
         Auto-discovers full Firefox profiles paths on a GNU/Linux system
@@ -36,6 +32,7 @@ class FirefoxPlugin(Plugin):
         profiles = []
 
         # Default Firefox profile locations
+        cache_dir = f"{Constants.USERHOMEDIR}/.cache/mozilla/firefox/"
         config_dir = f"{Constants.USERHOMEDIR}/.mozilla/firefox"
         profiles_ini = f"{config_dir}/profiles.ini"
 
@@ -49,7 +46,7 @@ class FirefoxPlugin(Plugin):
                     relative_id = config.get(section, 'IsRelative')
                     if relative_id == profile_id:
                         full_profile_path = (
-                            f"{config_dir}/{config.get(section, 'Path')}"
+                            f"{cache_dir}/{config.get(section, 'Path')}"
                         )
 
                         # Only add full profile directories
@@ -58,8 +55,16 @@ class FirefoxPlugin(Plugin):
 
         return profiles
 
-    def scan(self) -> list:
-        pass
+    def scan(self) -> tuple[int, int]:
+        profiles = self.get_profiles()
+        files = 0
+        size = 0
 
-    def clean(self) -> None:
-        pass
+        if profiles:
+            for profile in profiles:
+                files_data, size_data = self.scanner.get_directory_data(
+                    profile, self.inventory
+                )
+                files += files_data
+                size += size_data
+        return files, size
