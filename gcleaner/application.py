@@ -56,16 +56,18 @@ class GCleaner(Gtk.Application):
 
 
 if __name__ == "__main__":
-    app = GCleaner()
-    app.run()
+    # app = GCleaner()
+    # app.run()
     # from plugins.firefox import FirefoxPlugin
     # from utils.commons import to_human_format
     # ff = FirefoxPlugin()
     # files, size = ff.scan()
     # print(f"Files: {files} - Size: {to_human_format(size)}")
-    # from plugins.trash import TrashPlugin
-    # from utils.commons import to_human_format
-    # tt = TrashPlugin()
-    # files, size = tt.scan()
+    # ff.clean()
     # print(f"Files: {files} - Size: {to_human_format(size)}")
-    # tt.clean()
+    from plugins.trash import TrashPlugin
+    from utils.commons import to_human_format
+    tt = TrashPlugin()
+    files, size = tt.scan()
+    print(f"Files: {files} - Size: {to_human_format(size)}")
+    tt.clean()

@@ -23,12 +23,12 @@ If you want to test the progress of the project and/or contribute with code, fol
 2. Install development dependencies:
     - **In Fedora:**
         ```sh
-        sudo dnf install gtk4-devel python3-gobject-devel polkit dmidecode
+        sudo dnf install gtk4-devel python3-gobject-devel python3-pytest polkit dmidecode
         ```
 
     - **In Ubuntu:**
         ```sh
-        sudo apt-get install libgtk-4-dev python-gi-dev pkexec dmidecode
+        sudo apt-get install libgtk-4-dev python-gi-dev python3-pytest pkexec dmidecode
         ```
 
 3. Install GLib schema:
@@ -61,3 +61,11 @@ To debug GTK+ widgets, you can use the GTK Widget Inspector, which is a built-in
 
 1. Use the keyboard shortcut `Control` + `Shift` + `I` (or in some cases: `Control` + `Shift` + `D`).
 2. Set the environment variable `GTK_DEBUG=interactive` before launch your application.
+
+## How to run unittest?
+
+To execute unit tests, you can run commands like this one:
+
+```sh
+PYTHONPATH=$(pwd)/gcleaner pytest -v tests/plugins/test_firefox.py
+```

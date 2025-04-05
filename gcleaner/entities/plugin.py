@@ -45,5 +45,7 @@ class Plugin(ABC):
         for path in self.inventory.paths:
             try:
                 Path(path).unlink()
+            except IsADirectoryError:
+                Path(path).rmdir()
             except Exception as e:
                 self.logger.warning(f"Error deleting {path} > {e}")

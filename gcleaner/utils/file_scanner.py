@@ -116,8 +116,9 @@ class FileScanner():
             else:
                 self.file_count += 1
                 self.total_size += info.get_size()
-                if inventory is not None:
-                    inventory.add(f"{dir.get_path()}/{info.get_name()}")
+
+            if inventory is not None:
+                inventory.add(f"{dir.get_path()}/{info.get_name()}")
 
         return self.file_count, self.total_size
 
