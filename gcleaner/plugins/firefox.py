@@ -25,6 +25,10 @@ from entities.plugin import Plugin
 class FirefoxPlugin(Plugin):
     """GCleaner Plugin to clean up the temporary files of Firefox."""
 
+    def __init__(self):
+        super().__init__()
+        self.summary = "Firefox - Temporary Files and Cache"
+
     def get_profiles(self) -> list:
         """
         Auto-discovers full Firefox profiles paths on a GNU/Linux system

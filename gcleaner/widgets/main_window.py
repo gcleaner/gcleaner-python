@@ -17,14 +17,20 @@ You should have received a copy of the GNU General Public License along
 with GCleaner. If not, see http://www.gnu.org/licenses/.
 """
 import logging
+import threading
+import time
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version("Gio", "2.0")
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GLib
 from widgets.toolbar import ToolBar
 from widgets.sidebar import Sidebar
 from entities.result import Result
 from constants import Constants
+from utils.commons import to_human_format
+# Plugins
+from plugins.firefox import FirefoxPlugin
+from plugins.trash import TrashPlugin
 
 
 class MainWindow(Gtk.ApplicationWindow):
@@ -41,6 +47,12 @@ class MainWindow(Gtk.ApplicationWindow):
             self.settings.get_int("window-width"),
             self.settings.get_int("window-height")
         )
+
+        # PLUGINS
+        self.plugins = [
+            FirefoxPlugin(),
+            TrashPlugin()
+        ]
 
         # BOXES
         # Contain the rest of the boxes (this is adjusted to the window)
@@ -68,9 +80,15 @@ class MainWindow(Gtk.ApplicationWindow):
             orientation=Gtk.Orientation.HORIZONTAL, spacing=0
         )
 
+        # Global file counter and disk space accumulator
+        self.total_files = 0
+        self.total_size = 0
+
         # BUTTONS
         self.scan_button = Gtk.Button.new_with_label(" Scan ")
+        self.scan_button.connect("clicked", self.on_scan_clicked)
         self.clean_button = Gtk.Button.new_with_label(" Clean ")
+        self.clean_button.connect("clicked", self.on_clean_clicked)
         """
         Initial state of the buttons (Scan painted blue
         and clear disabled)
@@ -92,6 +110,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.progress = 0
         self.percentage_progress = Gtk.Label()
         self.percentage_progress.set_markup(f"<b>{self.progress:.2f}%</b>")
+        self.percentage_progress.set_margin_end(4)
 
         # SEPARATORS
         self.content_separator = Gtk.Separator(
@@ -121,6 +140,7 @@ class MainWindow(Gtk.ApplicationWindow):
         # OTHERS WIDGETS
         # Widgets for status_box
         self.scanning_spin = Gtk.Spinner()
+        self.scanning_spin.set_margin_start(4)
         self.progress_bar = Gtk.ProgressBar()
         self.progress_bar.set_hexpand(True)
         self.progress_bar.get_style_context().add_class("progress-bar")
@@ -128,23 +148,22 @@ class MainWindow(Gtk.ApplicationWindow):
         self.progress_bar.set_margin_bottom(2)
         self.progress_bar.set_margin_start(4)
         self.progress_bar.set_margin_end(4)
-        self.progress_bar.set_fraction(0.8)
 
         # LIST STORE - SCAN/CLEANING INFORMATION
         self.result_store = Gio.ListStore.new(Result)
-        selection = Gtk.SingleSelection.new(self.result_store)
+        selection = Gtk.NoSelection.new(self.result_store)
 
         concept_factory = Gtk.SignalListItemFactory()
         concept_factory.connect("setup", self.setup_label)
-        concept_factory.connect("bind", self.bind_label, "Concept")
+        concept_factory.connect("bind", self.bind_label, "concept")
 
         size_factory = Gtk.SignalListItemFactory()
         size_factory.connect("setup", self.setup_label)
-        size_factory.connect("bind", self.bind_label, "Size")
+        size_factory.connect("bind", self.bind_label, "size")
 
         quantity_factory = Gtk.SignalListItemFactory()
         quantity_factory.connect("setup", self.setup_label)
-        quantity_factory.connect("bind", self.bind_label, "Quantity")
+        quantity_factory.connect("bind", self.bind_label, "quantity")
 
         column_view = Gtk.ColumnView.new(selection)
         column_view.set_hexpand(True)
@@ -171,6 +190,8 @@ class MainWindow(Gtk.ApplicationWindow):
         self.result_window.set_child(column_view)
         self.result_window.set_hexpand(True)
         self.result_window.set_vexpand(True)
+        self.result_window.set_margin_start(4)
+        self.result_window.set_margin_end(4)
 
         # Progress Bar & Spinner
         self.status_box.append(self.scanning_spin)
@@ -242,3 +263,83 @@ class MainWindow(Gtk.ApplicationWindow):
         label = list_item.get_child()
         value = getattr(item, property_name)
         label.set_text(str(value))
+
+    def on_scan_clicked(self, button):
+        self.scanning_spin.start()
+        self.scan_button.get_style_context().remove_class("suggested-action")
+        self.scan_button.set_sensitive(False)
+        self.result_store.remove_all()
+
+        thread = threading.Thread(target=self.scan_plugins)
+        thread.start()
+    
+    def scan_plugins(self):
+        total = len(self.plugins)
+        for i, plugin in enumerate(self.plugins):
+            files, size = plugin.scan()
+
+            # Calculate progress and update the UI
+            fraction = (i + 1) / total
+            GLib.idle_add(
+                self.update_progress, fraction, plugin.summary, files, size
+            )
+
+        GLib.idle_add(self.on_scan_complete)
+
+    def update_progress(self, fraction, summary, files, size):
+        # Safe update the UI
+        self.progress = fraction * 100
+        self.progress_bar.set_fraction(fraction)
+        self.percentage_progress.set_markup(f"<b>{self.progress:.2f}%</b>")
+
+        result = Result(
+            concept=summary,
+            size=to_human_format(size),
+            quantity=f"{files} archivos"
+        )
+        self.result_store.append(result)
+        self.total_files += files
+        self.total_size += size
+
+    def on_scan_complete(self):
+        self.scanning_spin.stop()
+        self.status_box.remove(self.scanning_spin)
+
+        if self.total_files > 0:
+            total_separator = Result(
+                concept="———————————————————————",
+                size="—————————",
+                quantity="—————————"
+            )
+            self.result_store.append(total_separator)
+            total_summary = Result(
+                concept="Analysis Results:",
+                size=to_human_format(self.total_size),
+                quantity="to be removed (Approximate size)"
+            )
+            self.result_store.append(total_summary)
+
+            self.info_img.show()
+            self.status_box.append(self.info_img)
+
+            self.clean_button.set_sensitive(True)
+            self.clean_button.get_style_context().add_class("destructive-action")
+        else:
+            self.success_img.show()
+            self.status_box.append(self.success_img)
+
+            self.clean_button.set_sensitive(False)
+            self.clean_button.get_style_context().remove_class("destructive-action")
+
+            total_summary = Result(
+                concept="😉 Cool! Your system is clean!",
+                size="",
+                quantity=""
+            )
+            self.result_store.append(total_summary)
+
+            self.scan_button.set_sensitive(True)
+            self.scan_button.get_style_context().add_class("suggested-action")
+
+    def on_clean_clicked(self, button):
+        pass

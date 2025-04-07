@@ -29,6 +29,7 @@ class Plugin(ABC):
     def __init__(self):
         super().__init__()
         self.logger = logging.getLogger(self.__class__.__name__)
+        self.summary = f"{self.__class__.__name__} Summary"
         self.scanner = FileScanner()
         self.inventory = PathsInventory()
 

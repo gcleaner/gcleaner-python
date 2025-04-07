@@ -23,6 +23,10 @@ from entities.plugin import Plugin
 
 class TrashPlugin(Plugin):
     """GCleaner Plugin to clean up the trash files of the system."""
+
+    def __init__(self):
+        super().__init__()
+        self.summary = "Recycle Bin"
     
     def scan(self) -> tuple[int, int]:
         trash_path = f"{Constants.USERHOMEDIR}/.local/share/Trash/files/"

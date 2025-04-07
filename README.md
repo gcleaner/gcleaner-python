@@ -62,7 +62,7 @@ To debug GTK+ widgets, you can use the GTK Widget Inspector, which is a built-in
 1. Use the keyboard shortcut `Control` + `Shift` + `I` (or in some cases: `Control` + `Shift` + `D`).
 2. Set the environment variable `GTK_DEBUG=interactive` before launch your application.
 
-## How to run unittest?
+## How to run unit test?
 
 To execute unit tests, you can run commands like this one:
 
