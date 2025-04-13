@@ -54,6 +54,13 @@ class MainWindow(Gtk.ApplicationWindow):
             TrashPlugin()
         ]
 
+        # Global file counter and disk space accumulator
+        self.total_files = 0
+        self.total_size = 0
+
+        # Flag variable used to add or remove success image
+        self.success_flag = False
+
         # BOXES
         # Contain the rest of the boxes (this is adjusted to the window)
         self.main_box = Gtk.Box(
@@ -79,10 +86,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.status_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=0
         )
-
-        # Global file counter and disk space accumulator
-        self.total_files = 0
-        self.total_size = 0
+        self.status_box.set_margin_start(4)
 
         # BUTTONS
         self.scan_button = Gtk.Button.new_with_label(" Scan ")
@@ -103,7 +107,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.info_img.set_from_icon_name("dialog-information")
         self.info_img.set_icon_size(Gtk.IconSize.NORMAL)
         self.success_img = Gtk.Image()
-        self.success_img.set_from_icon_name("dialog-ok")
+        self.success_img.set_from_icon_name("emblem-default")
         self.success_img.set_icon_size(Gtk.IconSize.NORMAL)
 
         # LABELS
@@ -140,7 +144,6 @@ class MainWindow(Gtk.ApplicationWindow):
         # OTHERS WIDGETS
         # Widgets for status_box
         self.scanning_spin = Gtk.Spinner()
-        self.scanning_spin.set_margin_start(4)
         self.progress_bar = Gtk.ProgressBar()
         self.progress_bar.set_hexpand(True)
         self.progress_bar.get_style_context().add_class("progress-bar")
@@ -265,6 +268,9 @@ class MainWindow(Gtk.ApplicationWindow):
         label.set_text(str(value))
 
     def on_scan_clicked(self, button):
+        if self.success_flag:
+            self.status_box.remove(self.success_img)
+            self.status_box.append(self.scanning_spin)
         self.scanning_spin.start()
         self.scan_button.get_style_context().remove_class("suggested-action")
         self.scan_button.set_sensitive(False)
@@ -276,7 +282,13 @@ class MainWindow(Gtk.ApplicationWindow):
     def scan_plugins(self):
         total = len(self.plugins)
         for i, plugin in enumerate(self.plugins):
-            files, size = plugin.scan()
+            files = 0
+            size = 0
+
+            check = self.sidebar.get_checkbutton_by_name(plugin.name)
+
+            if check.get_active():
+                files, size = plugin.scan()
 
             # Calculate progress and update the UI
             fraction = (i + 1) / total
@@ -292,12 +304,13 @@ class MainWindow(Gtk.ApplicationWindow):
         self.progress_bar.set_fraction(fraction)
         self.percentage_progress.set_markup(f"<b>{self.progress:.2f}%</b>")
 
-        result = Result(
-            concept=summary,
-            size=to_human_format(size),
-            quantity=f"{files} archivos"
-        )
-        self.result_store.append(result)
+        if files > 0:
+            result = Result(
+                concept=summary,
+                size=to_human_format(size),
+                quantity=f"{files} archivos"
+            )
+            self.result_store.append(result)
         self.total_files += files
         self.total_size += size
 
@@ -325,6 +338,7 @@ class MainWindow(Gtk.ApplicationWindow):
             self.clean_button.set_sensitive(True)
             self.clean_button.get_style_context().add_class("destructive-action")
         else:
+            self.success_flag = True
             self.success_img.show()
             self.status_box.append(self.success_img)
 

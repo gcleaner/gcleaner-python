@@ -16,7 +16,13 @@ Public License for more details.
 You should have received a copy of the GNU General Public License along
 with GCleaner. If not, see http://www.gnu.org/licenses/.
 """
+import gi
+gi.require_version('Gtk', '4.0')
+from gi.repository import Gtk, GLib
 import configparser
+import os
+import psutil
+import signal
 from pathlib import Path
 from constants import Constants
 from entities.plugin import Plugin
@@ -27,6 +33,7 @@ class FirefoxPlugin(Plugin):
 
     def __init__(self):
         super().__init__()
+        self.name = "firefox"
         self.summary = "Firefox - Temporary Files and Cache"
 
     def get_profiles(self) -> list:
@@ -71,4 +78,7 @@ class FirefoxPlugin(Plugin):
                 )
                 files += files_data
                 size += size_data
+        else:
+            self.logger.warning("No firefox profiles found!")
+
         return files, size

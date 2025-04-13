@@ -26,6 +26,7 @@ class TrashPlugin(Plugin):
 
     def __init__(self):
         super().__init__()
+        self.name = "trash"
         self.summary = "Recycle Bin"
     
     def scan(self) -> tuple[int, int]:

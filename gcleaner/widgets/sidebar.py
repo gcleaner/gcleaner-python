@@ -81,6 +81,7 @@ class Sidebar(Gtk.Box):
         firefox_box.append(firefox_icon)
         firefox_box.append(firefox_label)
         self.check_firefox.set_child(firefox_box)
+        self.check_firefox.set_name("firefox")
 
         # SYSTEM CHECKBOXS
         """           Trash           """
@@ -92,6 +93,7 @@ class Sidebar(Gtk.Box):
         trash_box.append(trash_icon)
         trash_box.append(trash_label)
         self.check_trash.set_child(trash_box)
+        self.check_trash.set_name("trash")
 
         # PACKAGING CHECKBOX
         self.apps_box.append(self.category_apps_label)
@@ -116,3 +118,9 @@ class Sidebar(Gtk.Box):
         self.check_trash.set_active(
             self.app_main_window.get_settings().get_boolean("scan-trash")
         )
+    
+    def get_checkbutton_by_name(self, name: str) -> Gtk.CheckButton | None:
+        for child in self.fixed_box.get_first_child():
+            if isinstance(child, Gtk.CheckButton) and child.get_name() == name:
+                return child
+        return None
